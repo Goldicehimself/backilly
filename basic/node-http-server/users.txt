@@ -1,0 +1,6 @@
+
+{"name":"goldice4cool","age":40,"balance":5000,"registeredAt":"1/19/2026, 3:49:33 PM"},
+{"name":"mike","age":"27","balance":5000,"registeredAt":"1/20/2026, 3:11:11 PM"},
+{"name":"golden","age":"50","balance":5000,"registeredAt":"1/20/2026, 3:11:45 PM"},
+{"name":"ojay","age":"90","balance":5000,"registeredAt":"1/20/2026, 3:12:13 PM"},
+{"name":"golden bot","balance":5000,"registeredAt":"2/2/2026, 3:42:32 PM"},
