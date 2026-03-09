@@ -1,5 +1,6 @@
 const express = require('express');
 const fs = require('fs');
+const QRCode = require('qrcode');
 const { getAllUsers, createUser, userDetails, registerUser, readUserLogs } = require('./controller.js');
 const connectDB = require('./Database/dbconnection.js');
 const { userRouter } = require('./src/modules/user/user.router.js');
@@ -7,11 +8,15 @@ const { restaurantRouter } = require('./src/modules/restaurant/restaurant.router
 const { ordersRouter } = require('./src/modules/order/orders.router.js');
 const { itemRouter } = require('./src/modules/item/item.router.js');
 const path = require('path');
-const EXPRESSPORT = 6000;
+const { trackRouter } = require('./src/modules/tracking/track.route.js');
+const EXPRESSPORT = 5000;
 
 
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 require('dotenv').config();
 
 
@@ -41,6 +46,7 @@ app.use("/api/v1/restaurant", restaurantRouter);
 
 app.use("/api/v1/order", ordersRouter);
 app.use('/api/v1/item', itemRouter);
+app.use('/api/v1/tracking', trackRouter);
 
 app.get('/read',readUserLogs);
 app.get('/getUsers', getAllUsers);

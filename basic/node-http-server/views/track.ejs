@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Track Your Order</title>
+    <style>
+      :root {
+        --bg: #f7f4ef;
+        --ink: #1c1b19;
+        --muted: #5f5c57;
+        --card: #ffffff;
+        --accent: #1f6f5b;
+        --accent-2: #ff8a3d;
+        --border: #e7e1d8;
+        --shadow: 0 18px 40px rgba(21, 17, 12, 0.12);
+      }
+
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background:
+          radial-gradient(1200px 600px at 80% -10%, #ffe4c4 0%, rgba(255, 228, 196, 0) 60%),
+          radial-gradient(800px 500px at -10% 10%, #d7f1ea 0%, rgba(215, 241, 234, 0) 55%),
+          var(--bg);
+        color: var(--ink);
+        font-family: "Poppins", "Segoe UI", Arial, sans-serif;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 32px 16px;
+      }
+
+      .wrap {
+        width: min(900px, 100%);
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 28px;
+        box-shadow: var(--shadow);
+      }
+
+      .hero {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        border-bottom: 1px dashed var(--border);
+        padding-bottom: 18px;
+        margin-bottom: 18px;
+      }
+
+      .title {
+        margin: 0;
+        font-size: 28px;
+        letter-spacing: -0.02em;
+      }
+
+      .badge {
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: #e8f6f2;
+        color: var(--accent);
+        font-weight: 600;
+        text-transform: capitalize;
+        border: 1px solid #cfe9e1;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 18px;
+      }
+
+      .panel {
+        background: #fffdf9;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 16px;
+      }
+
+      .label {
+        font-size: 12px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin: 0 0 6px;
+      }
+
+      .value {
+        font-size: 16px;
+        margin: 0;
+        font-weight: 600;
+      }
+
+      .order-id {
+        display: inline-block;
+        background: #f1f7f5;
+        color: var(--accent);
+        padding: 4px 10px;
+        border-radius: 8px;
+        border: 1px solid #d7ece6;
+        font-weight: 700;
+      }
+
+      .items {
+        list-style: none;
+        padding: 0;
+        margin: 8px 0 0;
+        display: grid;
+        gap: 10px;
+      }
+
+      .item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: #ffffff;
+        border: 1px solid var(--border);
+      }
+
+      .qty {
+        background: #fff1e6;
+        color: #b25a1f;
+        border: 1px solid #f3d2bd;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-weight: 600;
+        font-size: 12px;
+      }
+
+      .footer {
+        margin-top: 18px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .progress {
+        margin-top: 14px;
+      }
+
+      .progress-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 8px;
+        margin-bottom: 8px;
+      }
+
+      .progress-track {
+        height: 10px;
+        border-radius: 999px;
+        background: #f1efe9;
+        border: 1px solid var(--border);
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, var(--accent), var(--accent-2));
+        border-radius: inherit;
+        transition: width 0.6s ease;
+      }
+
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 6px;
+        margin-top: 10px;
+      }
+
+      .step {
+        text-align: center;
+        font-size: 11px;
+        color: var(--muted);
+        position: relative;
+      }
+
+      .step::before {
+        content: "";
+        display: block;
+        margin: 0 auto 6px;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #e8e2d9;
+        border: 1px solid #d6cfc5;
+      }
+
+      .step.active {
+        color: var(--ink);
+        font-weight: 600;
+      }
+
+      .step.active::before {
+        background: var(--accent);
+        border-color: #0f4f3f;
+      }
+
+      .hint {
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .cta {
+        background: var(--accent);
+        color: #fff;
+        padding: 10px 16px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        border: 1px solid #115b49;
+      }
+
+      @media (max-width: 720px) {
+        .hero { flex-direction: column; align-items: flex-start; }
+        .grid { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="card">
+        <div class="hero">
+          <div>
+            <h1 class="title">Track Your Order</h1>
+            <div class="label">Order ID</div>
+            <div class="order-id"><%= orderId %></div>
+          </div>
+          <div class="badge"><%= status %></div>
+        </div>
+
+        <div class="grid">
+          <div class="panel">
+            <p class="label">Order Details</p>
+            <% if (items && items.length) { %>
+              <ul class="items">
+                <% items.forEach(function(item) { %>
+                  <li class="item">
+                    <span><%= item.name %></span>
+                    <span class="qty">Qty: <%= item.qty %></span>
+                  </li>
+                <% }); %>
+              </ul>
+            <% } else { %>
+              <p class="value">No items found.</p>
+            <% } %>
+          </div>
+
+          <div class="panel">
+            <p class="label">Delivery Information</p>
+            <p class="value"><%= deliveryInfo %></p>
+            <p class="label" style="margin-top: 12px;">Estimated Delivery</p>
+            <p class="value"><%= typeof estimatedDelivery !== "undefined" && estimatedDelivery ? estimatedDelivery : "TBD" %></p>
+
+            <% 
+              const steps = ["placed", "processing", "shipped", "out for delivery", "delivered"];
+              const rawStatus = (status || "").toString().toLowerCase();
+              const normalizedStatus = rawStatus.replace("-", " ");
+              const stepIndex = Math.max(0, steps.indexOf(normalizedStatus));
+              const progressPercent = Math.round(((stepIndex + 1) / steps.length) * 100);
+            %>
+            <div class="progress">
+              <div class="progress-meta">
+                <span class="label" style="margin: 0;">Progress</span>
+                <span class="value" style="font-size: 14px;"><%= progressPercent %>%</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill" data-progress="<%= progressPercent %>"></div>
+              </div>
+              <div class="steps">
+                <% steps.forEach(function(step, idx) { %>
+                  <div class="step <%= idx <= stepIndex ? "active" : "" %>"><%= step %></div>
+                <% }); %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer">
+          <span class="hint">Need help? Call support with your order ID.</span>
+          <a class="cta" href="javascript:location.reload();">Refresh Status</a>
+        </div>
+      </div>
+    </div>
+    <script>
+      document.querySelectorAll(".progress-fill").forEach((el) => {
+        const value = Number(el.dataset.progress);
+        if (!Number.isNaN(value)) {
+          el.style.width = `${value}%`;
+        }
+      });
+    </script>
+  </body>
+</html>

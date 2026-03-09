@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tracck Your Order | <%= orderId %> </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body >
+    <div class="container mx-auto p-4">
+        <h1 class="text-2xl font-bold mb-4">Track Your Order</h1>
+        <p class="mb-2">Order ID: <span class="font-mono text-blue-600"><%= orderId %></span></p>
+        <p class="mb-4">Current Status: <span class="font-semibold text-green-600"><%= status %></span></p>
+        <div class="bg-gray-100 p-4 rounded-lg">
+            <h2 class="text-xl font-semibold mb-2">Order Details:</h2>
+            <ul class="list-disc list-inside">
+                <% items.forEach(function(item) { %>
+                    <li><%= item.name %> - Quantity: <%= item.quantity %></li>
+                <% }); %>
+            </ul>
+        </div>
+        <div>
+            <p class="mb-4">Delivery Information: <span class="font-semibold"><%= deliveryInfo %></span></p>
+        </div>
+    </div>
+    
+</body>
+</html>
