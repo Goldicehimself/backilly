@@ -1,5 +1,10 @@
 const express = require('express');
 const fs = require('fs');
+const YAML = require('yamljs');
+const swaggerUi = require('swagger-ui-express');
+
+const cors = require('cors');
+const rateLimit = require('express-rate-limit');
 const QRCode = require('qrcode');
 const { getAllUsers, createUser, userDetails, registerUser, readUserLogs } = require('./controller.js');
 const connectDB = require('./Database/dbconnection.js');
@@ -8,16 +13,29 @@ const { restaurantRouter } = require('./src/modules/restaurant/restaurant.router
 const { ordersRouter } = require('./src/modules/order/orders.router.js');
 const { itemRouter } = require('./src/modules/item/item.router.js');
 const path = require('path');
+const swaggerDocument = YAML.load(path.join(__dirname, "apidoc.yaml"));
 const { trackRouter } = require('./src/modules/tracking/track.route.js');
 const EXPRESSPORT = 5000;
 
-
 const app = express();
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  limit: 100, // limit each IP to 100 requests per windowMs
+  message: 'Too many requests from this IP, please try again after 15 minutes',
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+});
+
+
+
 app.use(express.json());
+app.use(cors({origin: 'http://localhost:3000', method: ['GET', 'POST']}));
 app.use(express.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 require('dotenv').config();
+app.use(limiter);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 
 //image retrieval

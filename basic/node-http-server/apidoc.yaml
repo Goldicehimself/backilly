@@ -1,0 +1,36 @@
+openapi: 3.0.0
+info:
+  title: User Management API
+  version: 1.0.0
+  description: API for managing users, including registration, retrieval, and logging.
+servers:
+  - url: http://localhost:5000/api/v1
+paths:
+  /items/all-items:
+    get:
+      tags:
+        - Items
+      summary: Retrieve all items
+      responses:
+        "200":
+          description: A list of items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Item"
+components:
+  schemas:
+    Item:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Item Name"
+        description:
+          type: string
+          example: "Item Description"
