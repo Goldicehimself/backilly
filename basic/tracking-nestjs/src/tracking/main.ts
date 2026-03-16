@@ -1,20 +1,20 @@
-import {NestFactory} from '@nestjs/core';
-import {AppModule} from './app.module';
-import {RedisIoAdaptor} from './common/redis-io-adaptor';
-import {Validator} from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import { RedisIoAdaptor } from '../common/redis-io.adapter';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule);
 
-    const redisIoAdaptor = new RedisIoAdaptor(app);
-    await redisIoAdaptor.connectToRedis();
-    app.useWebSocketAdapter(redisIoAdaptor);
+  const redisIoAdaptor = new RedisIoAdaptor(app);
+  await redisIoAdaptor.connectToRedis();
+  app.useWebSocketAdapter(redisIoAdaptor);
 
-    app.setGlobalPrefix('api/v1');
-    app.useGlobalPipes(new Validator());
-    app.enableCors();
+  app.setGlobalPrefix('api/v1');
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+  app.enableCors();
 
-    await app.listen(3000);
+  await app.listen(3000);
 }
 
 bootstrap();

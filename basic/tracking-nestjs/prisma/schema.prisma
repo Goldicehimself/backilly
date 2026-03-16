@@ -11,24 +11,20 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url = env("DATABASE_URL")
-
 }
-'pending', 'out-for-delivery', 'delivered', 'cancelled'
-
 //--ENUMS--
-emum orderStatus{
+enum orderStatus{
   pending
-  out-for-delivery
+  out_for_delivery
   delivered
   cancelled
-
 }
 //--MODELS--
 model order{
-  orderId          string @orderId @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  orderId          String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  ownerId          String @db.Uuid
   owner            User   @relation(fields: [ownerId], references: [userId])
-  orderItems       Item
+  orderItems       Item[]
   totalPrice       Decimal
   paymentStatus    String
   paymentMethod    String
@@ -42,7 +38,18 @@ model order{
   deliveryStatus     orderStatus @default(pending)
   
 @@index([ownerId])
-@@index(ownerId, status)
+@@index([ownerId, status])
+}
+
+model User {
+  userId String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  orders order[]
+}
+
+model Item {
+  itemId String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  orderId String @db.Uuid
+  order order @relation(fields: [orderId], references: [orderId])
 }
 
 
